@@ -3,19 +3,18 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  max-width: 800px;
   flex-direction: column;
   width: 100%;
+  max-width: 1400px;
 }
-.header .header_input {
+.input {
+  /* width: 100%; */
 }
-.header .header_input--email {
-}
-
-.header .header__btn_login {
+.header .button {
   height: initial;
   min-height: 3rem;
-  min-width: max-content;
+  min-width: 350px;
+  white-space: pre-wrap;
 }
 
 @media (min-width: 860px) {

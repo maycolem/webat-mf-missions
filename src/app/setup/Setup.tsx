@@ -1,17 +1,15 @@
 import { useAppDispatch } from "@/app";
-import { setUser } from "@/features";
-import {
-  useGetMissionsQuery,
-  useLoginMutation,
-} from "@/features/mission/missionApi";
-import useUserSelector from "@/features/user/useUserSelector";
-import { EventBus } from "@/utils/eventBus";
+import { resetUser, setUser } from "@/features";
+import { useLoginMutation } from "@/features/mission/missionApi";
 import { Button, Input } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
-import "./Setup.css";
+import React, { useState } from "react";
+import styles from "./Setup.module.css";
+import classNames from "classnames";
+import useUserSelector from "@/features/user/useUserSelector";
 
 const Setup = ({ children }) => {
   const dispatch = useAppDispatch();
+  const { user } = useUserSelector();
   const [login] = useLoginMutation();
   const [alias, setAlias] = useState("maycol.elcorrobarrutia@apuestatotal.com");
   const [password, setPassword] = useState("Password_123");
@@ -28,12 +26,15 @@ const Setup = ({ children }) => {
         setIsLoading(false);
       });
   };
+  const handleLogout = () => {
+    dispatch(resetUser());
+  };
 
   return (
     <>
-      <header className="header">
+      <header className={styles.header}>
         <Input
-          className="header_input header_input--email"
+          className={classNames(styles.input, styles.email)}
           value={alias}
           onChange={(e) => setAlias(e.target.value)}
           type="email"
@@ -41,7 +42,7 @@ const Setup = ({ children }) => {
           size="sm"
         />
         <Input
-          className="header_input"
+          className={classNames(styles.input)}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
@@ -50,12 +51,21 @@ const Setup = ({ children }) => {
         />
         <Button
           onClick={handleLogin}
-          className="header__btn_login"
+          className={classNames(styles.button)}
           color="primary"
           isLoading={isLoading}
           isDisabled={isLoading}
         >
           Login staging calimaco
+        </Button>
+        <Button
+          onClick={handleLogout}
+          className={classNames(styles.button)}
+          color="warning"
+          isLoading={isLoading}
+          isDisabled={isLoading}
+        >
+          Cerrar sesión {user?.alias}
         </Button>
       </header>
       {children}

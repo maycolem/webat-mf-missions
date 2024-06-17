@@ -43,7 +43,7 @@ function appendQueryStringParam(
 export const missionApi = createApi({
   reducerPath: "missionApi",
   baseQuery: customQuery,
-
+  tagTypes: ["GetUserMissions"],
   endpoints: (builder) => ({
     login: builder.mutation<any, any>({
       query: ({ alias, password }) => {
@@ -77,6 +77,40 @@ export const missionApi = createApi({
           method: "post",
         };
       },
+      providesTags: ["GetUserMissions"],
+    }),
+    enrollUserMission: builder.mutation<
+      GetUserMissionsResponse,
+      { session: string; mission: string }
+    >({
+      query: ({ session, mission }) => {
+        const body = new URLSearchParams();
+        body.append("session", session);
+        body.append("mission", mission);
+        return {
+          url: CalimacoApi.missions.enrollUserMission,
+          body,
+          method: "post",
+        };
+      },
+      invalidatesTags: ["GetUserMissions"],
+    }),
+    cancelUserMission: builder.mutation<
+      GetUserMissionsResponse,
+      { session: string; mission: string }
+    >({
+      query: ({ session, mission }) => {
+        const body = new URLSearchParams();
+        body.append("session", session);
+        body.append("mission", mission);
+
+        return {
+          url: CalimacoApi.missions.cancelUserMission,
+          body,
+          method: "post",
+        };
+      },
+      invalidatesTags: ["GetUserMissions"],
     }),
   }),
 });
@@ -85,4 +119,6 @@ export const {
   useGetMissionsQuery,
   useGetUserMissionsQuery,
   useLoginMutation,
+  useEnrollUserMissionMutation,
+  useCancelUserMissionMutation,
 } = missionApi;

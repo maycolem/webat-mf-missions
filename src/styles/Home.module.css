@@ -4,12 +4,3 @@
   flex-direction: column;
   gap: 1rem;
 }
-.missions {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-}
-
-.card {
-  padding: 1rem;
-}

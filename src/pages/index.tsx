@@ -5,10 +5,10 @@ import {
 import useUserSelector from "@/features/user/useUserSelector";
 import classNames from "classnames";
 import { Inter } from "next/font/google";
-import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
 import styles from "@/styles/home.module.css";
-import { Card, Chip } from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
+import { MissionCard, MissionGrid } from "@/features/mission/components";
 
 const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
@@ -16,47 +16,43 @@ export default function Home() {
   const { data: dataPublicMissions } = useGetMissionsQuery(null, {
     skip: session,
   });
-  const { data: dataUserMissions } = useGetUserMissionsQuery(session, {
+  const {
+    data: dataUserMissions,
+    isLoading,
+    isFetching,
+  } = useGetUserMissionsQuery(session, {
     skip: !session,
   });
 
-  console.log("session => ", session);
-  console.log(dataPublicMissions);
   console.log(dataUserMissions);
-
-  const RenderMissions = ({ missions }) => {
-    if (!missions) return;
-    return (
-      <div className={styles.missions}>
-        {missions.map((pm) => {
-          return (
-            <Card className={styles.card} shadow="lg">
-              <JsonView src={pm}></JsonView>
-            </Card>
-          );
-        })}
-      </div>
-    );
-  };
+  console.log("isLoading => ", isLoading);
+  console.log("isFetching => ", isFetching);
 
   return (
     <>
       <main className={classNames(inter.className, styles.home)}>
         {session ? (
           <>
+            <Chip variant="dot" color="success">
+              Activos
+            </Chip>
+            <div style={{ maxWidth: "400px" }}>
+              <MissionCard
+                mission={dataUserMissions?.currentMission}
+                type={"active"}
+              />
+            </div>
             <Chip variant="dot" color="warning">
               Disponibles
             </Chip>
-            {RenderMissions({
-              missions: dataUserMissions?.availables_missions,
-            })}
+            <MissionGrid missions={dataUserMissions?.availables_missions} />
             <Chip variant="dot" color="default">
               Antiguos
             </Chip>
-            {RenderMissions({ missions: dataUserMissions?.oldMissions })}
+            <MissionGrid missions={dataUserMissions?.oldMissions} type="old" />
           </>
         ) : (
-          <>{RenderMissions({ missions: dataPublicMissions })}</>
+          <MissionGrid missions={dataPublicMissions} />
         )}
       </main>
     </>

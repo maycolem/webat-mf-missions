@@ -39,6 +39,32 @@ export interface Objective {
 export interface GetUserMissionsResponse extends BaseResponse {
   oldMissions: OldMission[];
   availables_missions: AvailablesMission[];
+  currentMission: CurrentMission;
+}
+
+export interface CurrentMission {
+  company: string;
+  mission: string;
+  db: number;
+  user: string;
+  status: string;
+  enroll_date: string;
+  expiration_date: string;
+  end_date: null;
+  data: Data;
+  game: null;
+  operation: null;
+  cancelled_date: null;
+  missionDefinition: MissionDefinition;
+}
+export interface MissionDefinition {
+  mission: string;
+  name: string;
+  prize: number;
+  cms: CMS;
+  objectives: Objective[];
+  init_date: string;
+  end_date: string;
 }
 
 export interface AvailablesMission {

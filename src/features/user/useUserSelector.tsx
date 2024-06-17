@@ -1,5 +1,4 @@
 import { useAppSelector } from "@/app";
-import React from "react";
 
 const useUserSelector = () => {
   return {
