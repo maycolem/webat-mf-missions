@@ -20,7 +20,9 @@ const MissionGrid = ({ missions, type }: Props) => {
   return (
     <div className={styles.missions}>
       {missions.map((m) => {
-        return <MissionCard mission={m} type={type}></MissionCard>;
+        return (
+          <MissionCard key={m.mission} mission={m} type={type}></MissionCard>
+        );
       })}
     </div>
   );
